@@ -9,7 +9,7 @@ Spotify uses a common method for producing recommendations known as collaborativ
 
 Furthermore, as the business model of Spotify is built in a way where artists are compensated by number of streams, the homogenisation of new music become more prevalent. Such as making songs more catchier and shorter.
 
-The recommender system I would like to propose is for users to be recommended songs based on the 'DNA' of the music they have been listening to with the goal of potentially exposing the listener to songs form different genres and epochs. This is therefore a cluster or nearest neighbour recommendation system. This would broaden the horizon of music listeners and also bring attention to artists that create music as an artform as opposed to achieving the highest streaming numbers.
+The recommender system I would like to propose is for users to be recommended songs based on the 'DNA' of the music they have been listening to with the goal of potentially exposing the listener to songs form different genres and epochs.  This would broaden the horizon of music listeners and also bring attention to artists that create music as an artform as opposed to achieving the highest streaming numbers.
 
 ## Data Dictionary
 
@@ -42,44 +42,91 @@ There were 2 datasets that were used from Kaggle, 'data_o' and 'data_by_year_o'.
 
 While checking for duplicates in terms of artist and song name, a duplicate can be a remastered version of the first released song. By definition, remastering music is essentially improving on the quality of the original copy of a song or album. Removing flaws from the music, providing a cleaner, sharper and more refined listening experience whilst trying to bringing the music up to date with current standard. After remastering, certain attributes of the song would still generally remain the same, such as key, time signature, duration, tempo and speechiness. Nonetheless these duplicates would not be remove them, as there are some music enthusiast that actually preferred 'non tampered' music.
 
-However I would remove songs that are duplicates where they have the same exact, values in terms of audio features. These are songs that appear multiple times in different albums, but had different IDs or different popularity scores. For example the song 'Here Comes the Sun' had a lower popularity score from the album 'The Beatles 1967-1970' whereas the song with the higher popularity had belonged to the album 'Abbey Road (remastered)' where its a bigger compilation of classics by the band.
+However songs that are duplicates where they have the same exact, values in terms of audio features would be removed. These are songs that appear multiple times in different albums, but had different IDs or different popularity scores. For example the song 'Here Comes the Sun' had a lower popularity score from the album 'The Beatles 1967-1970' whereas the song with the higher popularity had belonged to the album 'Abbey Road (remastered)' where its a bigger compilation of classics by the band.
 
 The longest song duration in the dataset shows to be 90 minutes long. These are likely to be podcast are maybe comedy albums that comedians have put out. Or could also be audio of soundscapes people use for mediation. Ultimately for this project, with the knowledge that most songs tend to be under 10 minutes. I would remove all songs that exceed this duration.
 
 Reformatting of string in object columns had also been done to remove symbols and separating main artist and featuring artist.
 
+
 ## Exploratory Data Analysis
-![](./images/duration-of-music-decline-overtime.png)
-
-Shorter duration in songs shows that artist are incentivised to make shorter songs for more plays as they are paid per stream.
-
-Furthermore songs tend to be more popular, past the 50 mark, with shorter duration.
-
 ![](./images/loudness-increase-overtime.png)
 
 Loudness, the inherent volume of the music itself, before any adjustments by the listener.
 
-What this shows is dynamic range becomes much more restricted. As in, the contrast between the really soft stuff, and the really loud stuff shrinks, so the overall emotional impact of the music is reduced.
+As the years pass, music have been mastered to be louder. When a song is produced to be inherently loud, the dynamic range becomes much more restricted. Meaning the fidelity of the song is compromised and can even reduce the overall emotional impact of the music.
+
+For many years now, Standard Operating Procedure when mastering music has been to make the finished, mastered track as loud as possible.
+
+The idea is that louder tracks will grab the listener’s attention and lead to greater downloads, and if a track is noticeably softer l than other songs in a playlist or on the radio, and this may result in the listener having a subconscious negative impression of the song.
 
 ![](./images/variance-of-music-decreasing-over-time.png)
 
 Key or pitch include details about harmony, melody, chords, and progressions – essentially how the notes were arranged and unfolded over the course of the song.
 
-Data suggested that the variety of pitch progressions used has shrunk over the years. In other words, musicians are becoming less inventive and adventurous in how they get from one note or chord to the next, and instead seem to be relying more and more on the same sequences and patterns that others have used successfully in the past.
+The above trend suggested that the variety of pitch progressions used has shrunk over the years. In other words, musicians are becoming less inventive and adventurous in how they get from one note or chord to the next, and instead seem to be relying more and more on the same sequences and patterns that others have used successfully in the past.
 
-![](./images/music-released-in-january-the-highest.png)
+![](./images/duration-of-music-decline-overtime.png)
 
-Generally, the first two months of the year are a great time to release new music. Why? The market isn't as saturated as later on in the year, and the minds of listeners are open to new things.
+We see a gradual decrease in song duration until 2011, and then a sharp decline after. This when Spotify had started its streaming services.
+
+Spotify would only pay out after a certain amount of a song has been played. As a result, the average length of a song intro has decreased from over 20 seconds in the 80’s to less than 5 now. This shows that artist are incentivised to make shorter songs for more plays as they are paid per stream.
+
+### The 'Spotify Sound'
+
+With such an abundance of music available, it has become very competitive got artist to grab the listeners attention.
+
+Additionally, data suggest we are far less likely to skip a track we’ve heard before.
+As a result, it is now common for tracks to feature the hook, guest artist or a prominent sample in the first few seconds contributing to a phenomenon known as the “Spotify sound”, something that artists are paying a lot to try procure.
+
+This method of song writing and production has also considered to be a a proven blueprint for creating a hit song,
+
+As a result, given the above trends and Spotify business model, chart music is becoming more homogenized.
+
+### Content Based as a Solution
+
+With a content based recommender that recommends music based only on audio feature, it is expected that music from different genres, epochs and languages would be recommended.
+
+The user would be presented an opportunity be exposed to different types of music to broaden their music listening horizons as opposed to being recommended songs based on what's popular or what other people are listening that tend to be chart music, therefore preventing the echo chamber effect and the homogenization of music.
+
+ ![](./images/long-tail.png)
+
+In theory, the Long Tail coined by Chris Anderson describes the idea that the internet affects the types of products being sold that produce the majority of the revenue, such that selling a large amount of niche product is becoming more important to the sales of companies
+
+However with social media and algorithm-driven recommendations (collaborative filtering), including Spotify’s own playlists, seem to magnify the bandwagon effect, whereby popular songs become even more popular by virtue of their popularity.
+
+Hopefully this recommender would draw more recommendations along the Long Tail where and hopefully create more demand in niche genres, artist or songs. Thus, encourage the creation of music that would not inevitably sound the same, as artist would be less incentivised to ‘sell out’.
+
+## Metrics
+
+As this is a content based recommender and there is no user data to compare predicated recommendations with similar user ratings using RMSE score, metrics would therefore have to be qualitative.
+
+Serendipity
+
+Novelty
+
+Are different genres recommended?
+
+Are different languages recommended?
+
+Are songs from different eras recommend?
+
 
 ## Clustering
 
-### Clustering Genre Together
+One of the limitations of content based recommendations, as with others, that it is still known to create a filter bubble/echo chamber. However because the content we are recommending is music based on just audio features, there is still a possibility for recommendations to not be the same genre, epoch or language.
 
-In this section, data_by_genres_df is used for clustering to see how the different genres would be clustered together based on their average song attributes, using different clustering methods.
+How we can prove this is by clustering the song data.
 
-By using this dataset, we can see the different kinds of genre you could expect from a given cluster.
+### Visualising the data
 
-### KMeans
+To visualise our data, we use t-Distributed Stochastic Neighbor Embedding (t-SNE). t-SNE reduces high dimension data while preserving information on local similarities, trying to preserve the neighbourhood of the respective data points which give a feel or intuition of how the data lives in a given feature space.
+
+![](./images/tsne.png)
+
+Intuitively we can see that there are some clusters. Based on the globular shape of the t-SNE results, we can expect KMeans to perform well.
+
+### KMeans CLustering
 
 Kmeans algorithm is an iterative algorithm that tries to partition the dataset into K pre-defined distinct non-overlapping subgroups (clusters) where each data point belongs to only one group. It tries to make the intra-cluster data points as similar as possible while also keeping the clusters as different (far) as possible.
 
@@ -87,15 +134,23 @@ Before deciding any value of K, we try the elbow method first.
 
 ![](./images/elbow-method.png)
 
-From just using the elbow method, it suggest that 2 cluster is optimal. However just clustering 2973 genres into 2 clusters is not logical, I would therefore give my own K value or look into other clustering methods that makes more sense by just eyeballing it.
+From the above graph we see that the elbow is at K =8, where the distortion/inertia start decreasing in a linear fashion. Thus for the given data, we can conclude that the optimal number of clusters for the data is 8.
 
-The K value that I had is 30. To visualise this on the high dimensional dataset, T-SNE projects it into lower dimensional space.
+### Analyzing where Johann Sebastien Bach falls
 
-![](./images/k-mean30.png)
+![](./images/bach-songs.png)
 
-Visually, the segementation of the data does not appear to be the best. May have to reconsider the clustering algorithm or the number of cluster.
+Johann Sebastien Bach, a famous composer of classical music, when his songs are clustered based on only audio features, we see a clear tendency for his music to fall under Cluster 1 while some songs can still be found in under clusters.
 
-## Recommendations
+This is indicative that the boundaries of music are fluid, and songs from different genres would be neighbours in a given feature space.
+
+Even though we can predict there may be different types of genre within a cluster, the algorithm of choice will still be cosine similarity instead of of using a pairwise distance metric.
+
+ Cosine similarity does not consider magnitude in its similarity measurement unlike euclidean distance in a K Nearest Neighbour Recommender. In theory, using Cosine Similarity should result in recommendations from cluster and therefore different genre.
+
+## Building a Content Based Recommender using Cosine Similarity
+
+
 
 Implicit
 - or get implicit feedback on the number times a user skips recommended suggestion (not the most accurate as clicks can happen by accident)
