@@ -105,7 +105,7 @@ As this is a content based recommender and there is no user data to compare pred
 
 Diversity measures how narrow or wide the spectrum of recommended products are. A recommender that only recommends the music of one artiste is pretty narrow; one that recommends across multiple artistes is more diverse.
 
-The following questions fall under how we diverse the recommendations are:
+The following questions fall under how diverse the recommendations are:
 - Are different genres recommended?
 - Are different languages recommended?
 - Are songs from different eras recommend?
@@ -120,7 +120,7 @@ In general, recommenders tend to create recommendations that consist of popular 
 
 The content base recommender's goal is to ensure that recommendations are not popular to align with the objective of recommending more niche artist, songs or genre.
 
-## Building the Recommender
+## Validating Intuition
 
 One of the limitations of content based recommendations, as with others, that it is still known to create a filter bubble. However because the content we are recommending is music based on just audio features, there is still a possibility for recommendations to not be the same genre, epoch or language.
 
@@ -206,7 +206,54 @@ These songs were selected as they are fairly popular and recognisable as well as
 |Oasis|Don't Look Back In Anger|1995|English|Britpop
 
 
-We can see that the current recommender satisfy the diversity metric. However in terms novelty, the score would be how
+We can see that the current recommender satisfy the diversity metric. However in terms novelty, the score would be rather high as the recommendations are songs that are very unfamiliar. This raises a problem of whether the recommender is trustworthy. Not only would other users receive the same recommendations, but the recommendations are not tailored to them and may seem random.
+
+Therefore the author has decided to use his own streaming history data to reduce the perceived randomness and personalise to the recommender.
+
+## Personalizing the Recommender
+
+### Feature Engineering
+
+Spotify allows you to download your own streaming data from the website directly. After a few days, you would receive a zip folder of your listening history in j.son format. The data is sorted by song and the duration you listen to particular song per listening session. After using a groupby function, you would get the total duration you would have listened to a particular song, under the 'msPlayed' .
+
+3909 out of 8749 songs from the streaming history data were then merged onto the Kaggle dataset on the 'main_aritst' and 'song' column. from these 3909 songs, listen counts could then be calculated by dividing the 'msPlayed' column by the 'duration_ms' columns.
+
+### Creating a Target variable
+
+![](./images/streaming-history.png)
+
+Based on the histogram plotted against the 3909 songs, we can conclude that 10 is the number of times listened to a song to be considered a 'favourite'. songs with 10 listens and greater would therefore be labelled with a 1, and the others will be labelled with a 0.
+
+We now have our dataset to train our classification models on, to predict songs that the other have yet to listen to in the Kaggle dataset.
+
+### Using Ensembled Methods for classification
+
+Ensemble methods are techniques that create multiple models and then combine them to produce improved results. Ensemble methods usually produces more accurate solutions than a single model would. This has been the case in a number of machine learning competitions, where the winning solutions used ensemble methods.
+
+Therefore the three models that were selected for this project are Random Classifier, Adaboost and XGBoost.
+
+### Handling Imbalance Classes
+
+Before training our models, we have to address that the dataset is highly imbalanced, with approximately 7% of the dataset being the target. This may results in our models to have poor predictive performance, specifically for the minority class.
+
+Therefore we will use SMOTE, Synthetic Minority Over-Sampling Technique, by joining the points of the minority class with line segments and then placing artificial points on these lines. This is to ensure that our train test split does not under sample our minority class.
+
+### Evaluating the models
+
+If our model were to classify every song as not a favourite, we would have an accuracy of 93%. This is the baseline score to be in terms of accuracy. But ultimately, model selection will be based on Precision there is a low cost associated with False Negative.
+
+
+|Model               |Accuracy  |Precision|
+|:---|:---|:-----------|
+Baseline| 93.2%| - |
+Random Forest| 100%|91.4%|
+Ada Boost|90.6%|92.9%|
+XGBoost|100%|95.1%|
+
+
+
+
+
 
 Implicit
 - or get implicit feedback on the number times a user skips recommended suggestion (not the most accurate as clicks can happen by accident)
