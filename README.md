@@ -101,20 +101,28 @@ Hopefully this recommender would draw more recommendations along the Long Tail w
 
 As this is a content based recommender and there is no user data to compare predicated recommendations with similar user ratings using RMSE score, metrics would therefore have to be qualitative.
 
-Serendipity
+### Diversity
 
-Novelty
+Diversity measures how narrow or wide the spectrum of recommended products are. A recommender that only recommends the music of one artiste is pretty narrow; one that recommends across multiple artistes is more diverse.
 
-Are different genres recommended?
+The following questions fall under how we diverse the recommendations are:
+- Are different genres recommended?
+- Are different languages recommended?
+- Are songs from different eras recommend?
 
-Are different languages recommended?
+If the answer to these questions, are 'yes' then we would satisfy the Diversity metric.
 
-Are songs from different eras recommend?
+### Novelty
 
+Novelty measures how new, original, or unusual the recommendations are for the user.
 
-## Clustering
+In general, recommenders tend to create recommendations that consist of popular items, or in this case songs, as most user tend to engage with popular items and therefore having more data (as we learnt that recommendations are not commonly derived from the 'Long Tail') and these popular items do well in offline and online evaluations.
 
-One of the limitations of content based recommendations, as with others, that it is still known to create a filter bubble/echo chamber. However because the content we are recommending is music based on just audio features, there is still a possibility for recommendations to not be the same genre, epoch or language.
+The content base recommender's goal is to ensure that recommendations are not popular to align with the objective of recommending more niche artist, songs or genre.
+
+## Building the Recommender
+
+One of the limitations of content based recommendations, as with others, that it is still known to create a filter bubble. However because the content we are recommending is music based on just audio features, there is still a possibility for recommendations to not be the same genre, epoch or language.
 
 How we can prove this is by clustering the song data.
 
@@ -126,7 +134,7 @@ To visualise our data, we use t-Distributed Stochastic Neighbor Embedding (t-SNE
 
 Intuitively we can see that there are some clusters. Based on the globular shape of the t-SNE results, we can expect KMeans to perform well.
 
-### KMeans CLustering
+### KMeans Clustering
 
 Kmeans algorithm is an iterative algorithm that tries to partition the dataset into K pre-defined distinct non-overlapping subgroups (clusters) where each data point belongs to only one group. It tries to make the intra-cluster data points as similar as possible while also keeping the clusters as different (far) as possible.
 
@@ -134,7 +142,9 @@ Before deciding any value of K, we try the elbow method first.
 
 ![](./images/elbow-method.png)
 
-From the above graph we see that the elbow is at K =8, where the distortion/inertia start decreasing in a linear fashion. Thus for the given data, we can conclude that the optimal number of clusters for the data is 8.
+The total WSS (Within-Cluster-Sum of Squared Errors) measures the compactness of the clustering and we want it to be as small as possible. The Elbow method looks at the total WSS as a function of the number of clusters: One should choose a number of clusters so that adding another cluster doesn’t improve much better the total WSS.
+
+From the above graph we see that the elbow is at K =8.  where the WSS Score start decreasing in a linear fashion. Thus for the given data, we can conclude that the optimal number of clusters for the data is 8.
 
 ### Analyzing where Johann Sebastien Bach falls
 
@@ -144,13 +154,59 @@ Johann Sebastien Bach, a famous composer of classical music, when his songs are 
 
 This is indicative that the boundaries of music are fluid, and songs from different genres would be neighbours in a given feature space.
 
+
+## Building a Top N Content Based Recommender using Cosine Similarity
+
 Even though we can predict there may be different types of genre within a cluster, the algorithm of choice will still be cosine similarity instead of of using a pairwise distance metric.
 
- Cosine similarity does not consider magnitude in its similarity measurement unlike euclidean distance in a K Nearest Neighbour Recommender. In theory, using Cosine Similarity should result in recommendations from cluster and therefore different genre.
+Cosine similarity does not consider magnitude in its similarity measurement unlike euclidean distance in a K Nearest Neighbour Recommender. In theory, using Cosine Similarity should result in recommendations from different clusters and therefore different genre.
 
-## Building a Content Based Recommender using Cosine Similarity
+![](./images/cosine-similarity.png)
+
+The three songs that were used to compare recommendations on are:
+
+- Ice Ice Baby by Vanilla Ice (1990)
+- All of Me by John Legend (2016)
+- Mr Brightside by The Killers (2004)
+
+These songs were selected as they are fairly popular and recognisable as well as being songs from different genres and eras.
+
+### Evaluating the top 5 Recommendations
+
+#### Ice Ice Baby by Vanilla Ice
+
+|Artist               |Song    |Year | Language | Genre |
+|:---|:---|:-----------|:-----|:-----|
+|Tom Tom Club|Genius of Love|1981|English|Rock
+|Fern Kinney|Groove Me|1979|English|Electronic
+|Mellow Man Ace|Mentirosa|1989|English|Hip Hop
+|Whodini|Mentirosa|1986|English|Hip Hop
+|M.C. Luscious|Growing Up|1992|English|Hip Hop
 
 
+#### All of Me by John Legend
+
+|Artist               |Song    |Year | Language | Genre |
+|:---|:---|:-----------|:-----|:-----|
+|Rosemary Clooney|Snow|1954|English|traditional pop
+|Martina McBride|In My Daughter's Eyes|2003|English|Country
+|Irma Serrano|Canción de un Preso|1962|Spanish|Latin pop
+|Emeli Sandé|Clown|2012|English|Gospel
+|Fairuz|Baadak Ala Baly|1963|Arabic|Folk
+
+
+#### Mr Brightside by The Killers  
+
+|Artist               |Song    |Year | Language | Genre |
+|:---|:---|:-----------|:-----|:-----|
+|Taking Back Sunday|My Blue Heaven|2006|English|Alternative/Indie
+|Adema|Giving In|2001|English|Rock
+|Scorpions|Under the Same Sun|1993|English|Rock
+|Sex Pistols|Liar|1977|English|Alternative/Indie
+|Oasis|Don't Look Back In Anger|1995|English|Britpop
+
+
+We can see that the current recommender satisfy the diversity metric. However in terms novelty, the score would be how
 
 Implicit
 - or get implicit feedback on the number times a user skips recommended suggestion (not the most accurate as clicks can happen by accident)
@@ -162,22 +218,9 @@ Implicit
 Explicit
 - have the user for explicit feedback whether they like the recommendation (perceived quality)
 
-### Diferent types of Feature Selection/Extraction
-
-- Using SVD (Singular Vector Decompostion) "Matrix Decomposition"
-- Using PCA to select the most important variables
-
-### Metrics
-
-- Unsure if the metric is subject to the listener
 
 
-### Building the Recommender System
-- Naive and non personalised way by recreating the Collab Filtering as a baseline
-- using distance to build a recommender system via clustered genres
-- Using CNN as a recommender system
-    - emulating this research paper https://www.sciencedirect.com/science/article/pii/S1877050919310646/pdf?md5=4f9a5242eb223b5c96c9ebf130855467&pid=1-s2.0-S1877050919310646-main.pd
-- using cosine similarity
+
 
 ### Potential Limitations and Considerations
 
