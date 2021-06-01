@@ -213,14 +213,6 @@ Spotify allows you to download your streaming data from its website directly. Af
 
 3909 out of 8749 songs from my streaming history data were then merged onto the Kaggle dataset on the 'main_aritst' and 'song' column. from these 3909 songs, listen counts could then be calculated by dividing the 'msPlayed' column by the 'duration_ms' columns.
 
-## Personalizing the Recommender
-
-### Feature Engineering
-
-Spotify allows you to download your streaming data from its website directly. After a few days, you would receive a zip folder of your listening history in j.son format. The data is sorted by song and the duration you listen to a particular song per listening session. After using a groupby function on the artist and song, you would get the total duration you would have listened to a song, under the 'msPlayed'.
-
-3909 out of 8749 songs from my streaming history data were then merged onto the Kaggle dataset on the 'main_aritst' and 'song' column. from these 3909 songs, listen counts could then be calculated by dividing the 'msPlayed' column by the 'duration_ms' columns.
-
 ### Creating a Target variable
 
 ![](./images/streaming-history.png)
