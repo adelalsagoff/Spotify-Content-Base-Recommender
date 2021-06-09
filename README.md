@@ -87,7 +87,7 @@ The user would be presented with opportunities to be exposed to different types 
 
  ![](./images/long-tail.png)
 
-The Long Tail coined by Chris Anderson describes the idea that the internet affects the types of products being sold that produce the majority of the revenue, such that selling a large amount of niche product is becoming more important to the sales of companies.
+The Long Tail coined by Chris Anderson describes the idea that the internet, has changed market trends where more demand exist along the long tail. In e-commerce, The demand for niche products is caused by the availability of search tools, online stores not being limited by physical size and thus being able to have a larger selection of products.
 
 However with social media and algorithm-driven recommendations (collaborative filtering), including Spotify’s own generated playlists, seem to magnify the bandwagon effect, whereby popular songs become even more popular.
 
@@ -146,7 +146,7 @@ From the above graph, we see that the elbow is at K =8.  where the WSS Score sta
 
 ![](./images/bach-songs.png)
 
-Johann Sebastien Bach, a famous composer of classical music, when his songs are clustered based on only audio features, we see a clear tendency for his music to fall under Cluster 1. Yet some songs can still be found under other clusters.
+Johann Sebastien Bach, a famous composer of classical music, when his songs are clustered based on only audio features, we see a clear tendency for his music to fall under Cluster 3. Yet some songs can still be found under other clusters.
 
 This is indicative that the boundaries of music are fluid, and songs from different genres would exist as neighbors in a given feature space.
 
