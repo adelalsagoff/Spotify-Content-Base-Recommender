@@ -36,6 +36,34 @@ The recommender system I would like to propose is for users to be recommended so
 
 ## Executive Summary
 
+## Contents
+- [Data Cleaning](#Data-Cleaning)
+- [Exploratory Data Analysis](#Exploratory-Data-Analysis)
+  - [The Spotify Sound](#The-'Spotify-Sound')
+- [Content-Based as a Solution](#Content-Based-as-a-Solution)
+  - [Metrics](#Metrics)
+    - [Diversity](#Diversity)
+    - [Novelty](#Novelty)
+- [Validating Intuition](#Validating-Intuition)
+  - [Visualising the data](#Visualising-the-data)
+  - [KMeans Clustering](#Kmeans-Clustering)
+  - [Analyzing where Johann Sebastien Bach falls](#Analyzing-where-Johann-Sebastien-Bach-falls)
+- [Building a Top N Content-Based Recommender using Cosine Similarity](#Building-a-Top-N-Content-Based-Recommender-using-Cosine-Similarity)
+- [Evaluating the top 5 Recommendations](Evaluating-the-top-5-Recommendations)
+- [Personalizing the Recommender](Personalizing-the-Recommender)
+  - [Feature Engineering](Feature-Engineering)
+  - [Creating a Target Variable](Creating-a-Target-Variable)
+  - [Using Ensembled Methods for classification](Using-Ensembled-Methods-for-classification)
+  - [Handling Imbalance Classes](Handling-Imbalance-Classes)
+  - [Evaluating the models](Evaluating-the-models)
+  - [Creating a Personalized Dataset](Creating-a-Personalized-Dataset)
+- [Evaluating the top 5 Personalized Recommendations](Evaluating-the-top-5-Personalized-Recommendations)
+- [Improving the Recommender](Improving-the-Recommender)
+- [Conclusion](Conclusion)
+- [Limitations and Recommendations](Limitations-and-Recommendations)
+
+
+
 
 
 ## Data Cleaning
@@ -79,7 +107,7 @@ As a result, it is now common for tracks to feature the hook, guest artist, or a
 
 This method of songwriting and production has also considered being a proven blueprint for creating a hit song. As a result, given the above trends and Spotify business model, chart music is becoming more homogenized.
 
-### Content-Based as a Solution
+## Content-Based as a Solution
 
 As the boundaries of music are fluid and it is difficult to define a genre by only its audio features, I believe that a content-based recommender that recommends music based only on audio features would recommend music from different genres, epochs, and languages.
 
@@ -93,11 +121,11 @@ However with social media and algorithm-driven recommendations (collaborative fi
 
 The content-based recommender aims to draw more recommendations along the Long Tail and hopefully create more demand in niche genres, artists, or songs. Thus, encouraging the creation of music that would not inevitably sound the same, as artists would be less incentivized to ‘sell-out’.
 
-## Metrics
+### Metrics
 
 As this is a content-based recommender and there is no user data to compare predicated recommendations with similar user ratings using RMSE score, metrics would therefore have to be qualitative.
 
-### Diversity
+#### Diversity
 
 Diversity measures how narrow or wide the spectrum of recommended products is. A recommender that only recommends the music of one artist is considered to be narrow while one that recommends across multiple artists is considered to be more diverse.
 
@@ -108,7 +136,7 @@ The following questions fall under how diverse the recommendations are:
 
 If the answer to these questions is 'yes' then we would satisfy the Diversity metric.
 
-### Novelty
+#### Novelty
 
 Novelty measures how new, original, or unusual the recommendations are for the user.
 
@@ -213,7 +241,7 @@ Spotify allows you to download your streaming data from its website directly. Af
 
 3909 out of 8749 songs from my streaming history data were then merged onto the Kaggle dataset on the 'main_aritst' and 'song' column. from these 3909 songs, listen counts could then be calculated by dividing the 'msPlayed' column by the 'duration_ms' columns.
 
-### Creating a Target variable
+### Creating a Target Variable
 
 ![](./images/streaming-history.png)
 
@@ -249,7 +277,9 @@ All Models had performed better in terms of accuracy compared to baseline, howev
 
 ### Creating a Personalized Dataset
 
-The Kaggle dataset which only had songs that I have not listen to before was saved as 'test_df'.  XGBoost was then used on test_df to predict songs that I might enjoy and classify them as 1, otherwise, it would be classified as 0. This dataframe was then filtered to only have songs classified as 1 and then merged with the streaming history data where favourite songs also classified as 1 had also been filtered. This new dataframe,  with only songs that had been predicted to be enjoyed by me and already enjoy, consists of 24269 songs compared to the initial dataframe of 155098 songs which had included songs without any prediction of possibly being enjoyed.
+The Kaggle dataset which only had songs that I have not listen to before was saved as 'test_df'.  XGBoost was then used on test_df to predict songs that I might enjoy and classify them as 1, otherwise, it would be classified as 0. This dataframe was then filtered to only have songs classified as 1 and then merged with the streaming history data where favourite songs also classified as 1 had also been filtered. This new dataframe,  with only songs that had been predicted to be enjoyed by me and already enjoy, consists of 24269 songs compared to the initial dataframe of 155098 songs which had included songs without any prediction of possibly being enjoyed. Below is an illustration of the process.
+
+![](./images/personalized-dataset.png)
 
 ### Evaluating the top 5 Personalized Recommendations
 
@@ -296,12 +326,16 @@ Lastly, up until this section, the focus had been on recommendations based on on
 ![](./images/playlist-weight.png)
 
 ## Conclusion
+The recommender can provide recommendations where the user can expand their musical horizons. However, based on survey results, unless people are aware of the echo chamber effects they may not see the value of something like this right away. Nonetheless, as people become more informed, there might be greater demand for something like this down the road.
 
-- More for Passive listeners
-- Would only know it will work with A/B testing
+This may be better targeted towards casual listeners. As they are not actively engaged in deciding what songs that they are listening to which places them in a subconsciously open-minded state with regards to listening to music.
 
-## Recommendation
+## Limitations and Recommendations
 
-- How can I make a playlist more cohesive
-- NLP on lyrics
-- Play around with features, like valence
+The classification model to personalize the dataset depends on the amount of data available by the user’s streaming history. For a new user, similar songs would still be able to be recommended (solving the cold start problem) but it would not be personalized and may affect the hit rate.
+
+Expanding on one of the feedback from the survey results, where playlists are created based on mood, I would need more features to do achieve that.
+
+So maybe to improve the recommender further in that direction. NLP can be performed on lyric data. Where the user creates a  playlist with sad songs that have sad lyrics,  the recommender will recommend sad songs that have the same audio feature.
+
+Therefore, despite, the playlist having songs of different genres, there can be an overarching theme that makes it more cohesive.
